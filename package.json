@@ -1,0 +1,30 @@
+{
+  "name": "zenstack",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "zenstack generate && nuxt build",
+    "dev": "nuxt dev",
+    "vercel-build": "zenstack generate && nuxt build && prisma migrate deploy",
+    "zenstack:gen": "zenstack generate",
+    "db:push": "prisma db push",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "package-clean": "npm rm zenstack @zenstackhq/runtime @zenstackhq/server @zenstackhq/tanstack-query",
+    "up": "npm run package-clean && npm install -D zenstack@latest && npm install @zenstackhq/runtime@latest @zenstackhq/server@latest @zenstackhq/tanstack-query@latest",
+    "up-preview": "npm run package-clean && npm install --registry https://preview.registry.zenstack.dev -D zenstack@latest && npm install --registry https://preview.registry.zenstack.dev @zenstackhq/runtime@latest @zenstackhq/server@latest @zenstackhq/tanstack-query@latest"
+  },
+  "devDependencies": {
+    "prisma": "^5.4.2",
+    "zenstack": "^1.6.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.4.2",
+    "@zenstackhq/runtime": "^1.6.0",
+    "@zenstackhq/server": "^1.6.0",
+    "@zenstackhq/tanstack-query": "^1.6.0"
+  }
+}
