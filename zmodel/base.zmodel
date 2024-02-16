@@ -1,0 +1,5 @@
+abstract model BaseModal {
+    id Int @id @default(autoincrement())
+    createdDatetime DateTime @default(now()) @map("created_datetime")
+    updatedDatetime DateTime @default(now()) @updatedAt @map("updated_datetime")
+}

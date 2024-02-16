@@ -1,0 +1,12 @@
+model User {
+    id Int @id @default(autoincrement())
+    // If user is owner, organizationId is required
+    organizationId Int?
+    email String @unique
+    name String?
+    role String // admin, owner, contractor
+    permissions Json?
+
+    @@map("user")
+    @@ignore
+}

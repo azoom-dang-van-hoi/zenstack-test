@@ -1,0 +1,57 @@
+import "base"
+import "user"
+
+model Organization extends BaseModal {
+    name String @map("name") @db.VarChar(255)
+    address String? @map("address") @db.VarChar(255)
+    tel String? @map("tel") @db.VarChar(20)
+    fax String? @map("fax") @db.VarChar(20)
+    email String? @map("email") @db.VarChar(255)
+    parkings Parking[]
+    organizationStaffs OrganizationStaff[]
+    regions Region[]
+
+    @@allow('read, update', 
+        auth().role == 'admin' || 
+        (auth().role == 'owner' && auth().organizationId == id)
+    )
+
+    @@map("organization")
+}
+
+model OrganizationStaff extends BaseModal {
+    organization Organization @relation(fields: [organizationId], references: [id])
+    organizationId Int @map("organization_id")
+    email String @map("email") @db.VarChar(255)
+    name String? @map("name") @db.VarChar(100)
+    privilege Json? @map("privilege")
+    hasEmailNotif Int @map("has_email_notif") @db.TinyInt
+
+    organizationStaffRegions OrganizationStaffRegion[]
+
+    @@allow('create', 
+        auth().role == 'admin' || 
+        (auth().role == 'owner' && auth().organizationId == organizationId)
+    )
+    @@allow('read, update', 
+        auth().role == 'admin' || (auth().role == 'owner' && auth().id == id)
+    )
+
+    @@map("organization_staff")
+}
+
+model OrganizationStaffRegion extends BaseModal {
+    organizationStaffId Int @map("organization_staff_id")
+    regionId Int @map("region_id")
+    organizationStaff OrganizationStaff @relation(fields: [organizationStaffId], references: [id])
+    region Region @relation(fields: [regionId], references: [id])
+
+    @@allow('create, update, read', 
+        auth().role == 'admin' || 
+        (auth().role == 'owner' 
+            && auth().organizationId == organizationStaff.organizationId
+        )
+    )
+
+    @@map("organization_staff_region")
+}

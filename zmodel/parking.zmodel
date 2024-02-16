@@ -1,0 +1,23 @@
+import "base"
+import "user"
+import "organization"
+import "parking"
+import "region"
+
+model Parking extends BaseModal {
+    regionId Int? @map("region_id")
+    region Region? @relation(fields: [regionId], references: [id])
+    organizationId Int @map("organization_id")
+    organization Organization @relation(fields: [organizationId], references: [id])
+    name String @map("name") @db.VarChar(60)
+    zip String? @map("zip") @db.VarChar(10)
+    address String? @map("address") @db.VarChar(255)
+    @@allow('all', 
+        auth().role == 'admin' || 
+        (auth().role == 'owner' 
+            && auth().organizationId == organizationId 
+        )
+    )
+
+    @@map("parking")
+}

@@ -1,3 +1,5 @@
 node_modules
 lib
-prisma
+prisma/schema.prisma
+schema.md
+.zenstack_repl_history
