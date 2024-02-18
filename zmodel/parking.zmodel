@@ -10,12 +10,17 @@ model Parking extends BaseModal {
     organizationId Int @map("organization_id")
     organization Organization @relation(fields: [organizationId], references: [id])
     name String @map("name") @db.VarChar(60)
-    zip String? @map("zip") @db.VarChar(10)
+    zip String? @map("zip") @db.VarChar(10) @@validate(length(zip, 7), 'Zip code 1')
+    @@validate(length(zip, 7, 9), 'Zip code 2')
     address String? @map("address") @db.VarChar(255)
     @@allow('all', 
         auth().role == 'admin' || 
-        (auth().role == 'owner' 
-            && auth().organizationId == organizationId 
+        (auth().role == 'owner' &&
+            auth().organizationId == organizationId &&
+            (
+                regionId == null || 
+                region.organizationStaffRegions?[organizationStaffId == auth().id]
+            )
         )
     )
 

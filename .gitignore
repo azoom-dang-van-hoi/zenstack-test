@@ -3,3 +3,4 @@ lib
 prisma/schema.prisma
 schema.md
 .zenstack_repl_history
+dist

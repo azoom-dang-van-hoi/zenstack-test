@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "generate": "zenstack generate --schema=./zmodel/schema.zmodel && node scripts/index.js"
+    "generate": "zenstack generate",
+    "build:plugin": "tsc && cp -r plugin/plugin.zmodel dist/plugin.zmodel && cp -r plugin/package.json dist/package.json"
   },
   "devDependencies": {
     "@zenstackhq/openapi": "^1.8.1",

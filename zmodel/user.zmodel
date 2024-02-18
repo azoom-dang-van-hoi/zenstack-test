@@ -4,7 +4,7 @@ model User {
     organizationId Int?
     email String @unique
     name String?
-    role String // admin, owner, contractor
+    role String // admin, owner
     permissions Json?
 
     @@map("user")

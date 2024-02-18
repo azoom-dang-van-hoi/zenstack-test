@@ -11,7 +11,7 @@ model Organization extends BaseModal {
     organizationStaffs OrganizationStaff[]
     regions Region[]
 
-    @@allow('read, update', 
+    @@allow('all', 
         auth().role == 'admin' || 
         (auth().role == 'owner' && auth().organizationId == id)
     )
@@ -29,11 +29,11 @@ model OrganizationStaff extends BaseModal {
 
     organizationStaffRegions OrganizationStaffRegion[]
 
-    @@allow('create', 
+    @@allow('read,create,delete', 
         auth().role == 'admin' || 
         (auth().role == 'owner' && auth().organizationId == organizationId)
     )
-    @@allow('read, update', 
+    @@allow('update', 
         auth().role == 'admin' || (auth().role == 'owner' && auth().id == id)
     )
 
@@ -46,12 +46,11 @@ model OrganizationStaffRegion extends BaseModal {
     organizationStaff OrganizationStaff @relation(fields: [organizationStaffId], references: [id])
     region Region @relation(fields: [regionId], references: [id])
 
-    @@allow('create, update, read', 
+    @@allow('all', 
         auth().role == 'admin' || 
         (auth().role == 'owner' 
             && auth().organizationId == organizationStaff.organizationId
         )
     )
-
     @@map("organization_staff_region")
 }
