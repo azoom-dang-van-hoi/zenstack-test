@@ -11,8 +11,8 @@
   "devDependencies": {
     "@zenstackhq/openapi": "^1.8.1",
     "prisma": "^5.4.2",
-    "zenstack": "^1.6.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "zenstack": "^1.6.0"
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
