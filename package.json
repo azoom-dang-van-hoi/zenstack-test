@@ -9,7 +9,6 @@
     "build:plugin": "tsc && cp -r plugin/plugin.zmodel dist/plugin.zmodel && cp -r plugin/package.json dist/package.json"
   },
   "devDependencies": {
-    "@zenstackhq/openapi": "^1.8.1",
     "prisma": "^5.4.2",
     "ts-node": "^10.9.1",
     "zenstack": "^1.6.0"
@@ -17,8 +16,6 @@
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "@prisma/generator-helper": "^5.9.1",
-    "@zenstackhq/runtime": "^1.6.0",
-    "@zenstackhq/server": "^1.6.0",
-    "@zenstackhq/tanstack-query": "^1.6.0"
+    "@zenstackhq/runtime": "^1.6.0"
   }
 }

@@ -1,18 +1,15 @@
+// Split the schema into multiple files by resource
 import "zmodel/user"
 import "zmodel/organization"
 import "zmodel/parking"
 import "zmodel/region"
-
-generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["interactiveTransactions"]
-}
 
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
+// This is the plugin that will remove `ignore schema` from the schema.prisma file
 plugin myplugin {
     provider = './dist'
 }

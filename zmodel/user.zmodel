@@ -1,3 +1,4 @@
+// This is used to define auth context for Zenstack
 model User {
     id Int @id @default(autoincrement())
     // If user is owner, organizationId is required
@@ -8,5 +9,5 @@ model User {
     permissions Json?
 
     @@map("user")
-    @@ignore
+    @@ignore // Remove this model from the prisma schema because it's not a real table.
 }

@@ -1,6 +1,7 @@
 import { enhance } from "@zenstackhq/runtime"
 import { prisma } from "./db.js"
 
+// Get user context from request
 const user = {
   id: 1,
   email: "org-1@gmail.com",
@@ -9,12 +10,13 @@ const user = {
   organizationId: 1,
 }
 
+// Create Proxy Prisma Client to check policies
 const enhancedClient = enhance(prisma, {
   user,
 })
 
 async function bootstrap() {
-  console.time("Prisma query")
+  // Query parkings normaly using Prisma 
   const parkings = await prisma.parking.findMany({
     where: {
       organizationId: user.organizationId,
@@ -36,17 +38,14 @@ async function bootstrap() {
       region: true,
     },
   })
-  console.log("Prisma query: ", parkings)
-  console.timeEnd("Prisma query")
-  console.time("Enhanced query")
+  
+  // Query parkings using Zenstack enhanced Prisma Client
   const parkingsEnhanced = await enhancedClient.parking.findMany({
     include: {
       region: true,
       organization: true,
     },
   })
-  console.log("Enhanced query: ", parkingsEnhanced)
-  console.timeEnd("Enhanced query")
 }
 
 bootstrap()
