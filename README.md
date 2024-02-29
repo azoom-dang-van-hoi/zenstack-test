@@ -12,4 +12,4 @@
 4. Generate Prisma schema: `yarn generate`
 5. Migrate schema: `yarn prisma migrate dev`
 6. Add data example to database
-7. Run script test: `node index`
+7. Run server: `yarn dev`

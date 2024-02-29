@@ -1,22 +1,37 @@
 import { enhance } from "@zenstackhq/runtime"
 import { prisma } from "./db.js"
 
-// Get user context from request
-const user = {
-  id: 1,
-  email: "org-1@gmail.com",
-  role: "owner",
-  name: "ORG-1",
-  organizationId: 1,
-}
+import express from "express"
+import cors from "cors"
 
-// Create Proxy Prisma Client to check policies
-const enhancedClient = enhance(prisma, {
-  user,
+const app = express()
+const PORT = process.env.PORT || 5005
+
+app.use(cors())
+app.use(express.json())
+
+// Middleware to fake user context to request
+app.use((req, res, next) => {
+  if (
+    !+req.query.id ||
+    (!+req.query.organizationId && req.query.role !== "admin")
+  ) {
+    return res.sendStatus(403)
+  }
+  const user = {
+    id: +req.query.id,
+    email: req.query.email,
+    role: req.query.role,
+    organizationId:
+      req.query.role === "admin" ? undefined : +req.query.organizationId,
+  }
+  req.user = user
+  next()
 })
 
-async function bootstrap() {
-  // Query parkings normaly using Prisma 
+// Query parkings normaly using Prisma
+app.get("/v1/parkings", async (req, res) => {
+  const user = req.user
   const parkings = await prisma.parking.findMany({
     where: {
       organizationId: user.organizationId,
@@ -38,14 +53,22 @@ async function bootstrap() {
       region: true,
     },
   })
-  
-  // Query parkings using Zenstack enhanced Prisma Client
+  res.send(parkings)
+})
+
+// Query parkings using Zenstack enhanced Prisma Client
+app.get("/v2/parkings", async (req, res) => {
+  const user = req.user
+  const enhancedClient = enhance(prisma, {
+    user,
+  })
   const parkingsEnhanced = await enhancedClient.parking.findMany({
     include: {
       region: true,
       organization: true,
     },
   })
-}
+  res.send(parkingsEnhanced)
+})
 
-bootstrap()
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))

@@ -6,16 +6,20 @@
   "type": "module",
   "scripts": {
     "generate": "zenstack generate",
-    "build:plugin": "tsc && cp -r plugin/plugin.zmodel dist/plugin.zmodel && cp -r plugin/package.json dist/package.json"
+    "build:plugin": "tsc && cp -r plugin/plugin.zmodel dist/plugin.zmodel && cp -r plugin/package.json dist/package.json",
+    "dev": "nodemon index.js"
   },
   "devDependencies": {
     "prisma": "^5.4.2",
     "ts-node": "^10.9.1",
+    "nodemon": "^2.0.15",
     "zenstack": "^1.6.0"
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "@prisma/generator-helper": "^5.9.1",
-    "@zenstackhq/runtime": "^1.6.0"
+    "@zenstackhq/runtime": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }
