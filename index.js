@@ -55,6 +55,46 @@ app.get("/v1/parkings", async (req, res) => {
   })
   res.send(parkings)
 })
+app.get("/v1/procedures", async (req, res) => {
+  const user = req.user
+  const where =
+    user.role === "admin"
+      ? {}
+      : {
+          OR: [
+            {
+              organizationId: null,
+              parkingContract: {
+                parking: {
+                  organizationId: user.organizationId,
+                  OR: [
+                    {
+                      regionId: null,
+                    },
+                    {
+                      region: {
+                        organizationStaffRegions: {
+                          some: {
+                            organizationStaffId: user.id,
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              parkingContractId: null,
+              organizationId: user.organizationId,
+            },
+          ],
+        }
+  const userProcedures = await prisma.userProcedure.findMany({
+    where,
+  })
+  res.send(userProcedures)
+})
 
 // Query parkings using Zenstack enhanced Prisma Client
 app.get("/v2/parkings", async (req, res) => {
@@ -69,6 +109,15 @@ app.get("/v2/parkings", async (req, res) => {
     },
   })
   res.send(parkingsEnhanced)
+})
+
+app.get("/v2/procedures", async (req, res) => {
+  const user = req.user
+  const enhancedClient = enhance(prisma, {
+    user,
+  })
+  const userProcedures = await enhancedClient.userProcedure.findMany()
+  res.send(userProcedures)
 })
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))

@@ -1,0 +1,64 @@
+import 'base'
+import 'user'
+import 'parking'
+import 'organization'
+
+model ParkingContract extends BaseModal {
+  parkingId Int @map("parking_id")
+  parking Parking @relation(fields: [parkingId], references: [id])
+  status Int
+
+  @@allow('all', 
+        auth().role == 'admin' || 
+        (
+            auth().role == 'owner' &&
+            auth().organizationId == parking.organizationId &&
+            (
+              parking.regionId == null ||
+              (
+                parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
+              )
+            )
+        )
+    )
+
+  userProcedures UserProcedure[]
+
+  @@map("parking_contract")
+}
+
+model UserProcedure extends BaseModal {
+  parkingContractId Int? @map("parking_contract_id")
+  parkingContract ParkingContract? @relation(fields: [parkingContractId], references: [id])
+  organizationId Int? @map("organization_id")
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  status Int @map("status") @db.TinyInt
+  type Int @map("type")
+  content Json? @map("content")
+
+  @@allow('all', 
+    auth().role == 'admin' ||
+    (
+      auth().role == 'owner' &&
+      (
+        // Update contractor information affects multiple contracts of various owners.
+        (
+            parkingContractId == null &&
+            auth().organizationId == organizationId
+        ) || 
+        // Update contract information
+        (
+            organizationId == null &&
+            parkingContract.parking.organizationId == auth().organizationId &&
+            // TODO: Add a custom function or use inheritance to check region conditions
+            // Logic check region
+            (
+                parkingContract.parking.regionId == null ||
+                parkingContract.parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
+            )
+        )
+      ) 
+    )
+  )
+  @@map("user_procedure")
+}

@@ -3,6 +3,7 @@ import "user"
 import "organization"
 import "parking"
 import "region"
+import "contract"
 
 model Parking extends BaseModal {
     regionId Int? @map("region_id")
@@ -23,6 +24,8 @@ model Parking extends BaseModal {
             )
         )
     )
+
+    parkingContracts ParkingContract[]
 
     @@map("parking")
 }

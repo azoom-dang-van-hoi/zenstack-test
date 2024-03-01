@@ -1,5 +1,6 @@
 import "base"
 import "user"
+import "contract"
 
 model Organization extends BaseModal {
     name String @map("name") @db.VarChar(255)
@@ -10,6 +11,7 @@ model Organization extends BaseModal {
     parkings Parking[]
     organizationStaffs OrganizationStaff[]
     regions Region[]
+    userProcedures UserProcedure[]
 
     @@allow('all', 
         auth().role == 'admin' || 

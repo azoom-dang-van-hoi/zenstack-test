@@ -3,6 +3,11 @@ import "zmodel/user"
 import "zmodel/organization"
 import "zmodel/parking"
 import "zmodel/region"
+import "zmodel/contract"
+
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
     provider = "mysql"
