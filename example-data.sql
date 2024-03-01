@@ -10,3 +10,12 @@ INSERT INTO `organization_staff_region` VALUES (1,1,1,'2024-02-16 16:25:32.522',
 
 INSERT INTO `parking` VALUES (1,1,'P1','1234567','HN','2024-02-09 08:11:36.987','2024-02-09 08:11:36.987',1),(2,1,'P2','1234567','BN','2024-02-09 08:15:19.624','2024-02-09 08:15:19.624',NULL),(3,1,'Parking 1',NULL,NULL,'2024-02-18 16:19:15.316','2024-02-18 16:19:15.316',NULL),(4,1,'Parking 1',NULL,'123456789','2024-02-18 16:25:46.646','2024-02-18 16:25:46.646',NULL),(5,1,'Parking 1',NULL,'123456','2024-02-18 16:32:38.849','2024-02-18 16:32:38.849',NULL);
 INSERT INTO `zenstack-test`.`parking` (`organization_id`, `name`, `zip`, `address`) VALUES ('2', 'Parking 2', '1234567', 'HN');
+
+INSERT INTO `zenstack-test`.`parking_contract` (`parking_id`, `status`) 
+VALUES ('1', '1'), ('2', '1'), ('3', '1'), ('4', '1'), ('5', '1'), ('6', '1');
+
+INSERT INTO `zenstack-test`.`user_procedure` (`parking_contract_id`, `status`, `type`) VALUES ('1', '1', '2');
+INSERT INTO `zenstack-test`.`user_procedure` (`organization_id`, `status`, `type`) VALUES ('1', '1', '1');
+INSERT INTO `zenstack-test`.`user_procedure` (`organization_id`, `status`, `type`) VALUES ('2', '1', '1');
+INSERT INTO `zenstack-test`.`user_procedure` (`parking_contract_id`, `status`, `type`) VALUES ('6', '1', '2');
+INSERT INTO `zenstack-test`.`user_procedure` (`parking_contract_id`, `status`, `type`) VALUES ('2', '1', '3');
