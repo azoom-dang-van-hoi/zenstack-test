@@ -6,6 +6,8 @@ import 'organization'
 model ParkingContract extends BaseModal {
   parkingId Int @map("parking_id")
   parking Parking @relation(fields: [parkingId], references: [id])
+  contractorId Int? @map("contractor_id")
+  contractor Contractor? @relation(fields: [contractorId], references: [id])
   status Int
 
   @@allow('all', 
@@ -35,6 +37,8 @@ model UserProcedure extends BaseModal {
   status Int @map("status") @db.TinyInt
   type Int @map("type")
   content Json? @map("content")
+  contractorId Int? @map("contractor_id")
+  contractor Contractor? @relation(fields: [contractorId], references: [id])
 
   @@allow('all', 
     auth().role == 'admin' ||
@@ -44,7 +48,12 @@ model UserProcedure extends BaseModal {
         // Update contractor information affects multiple contracts of various owners.
         (
             parkingContractId == null &&
-            auth().organizationId == organizationId
+            auth().organizationId == organizationId &&
+            contractorId != null &&
+            contractor.parkingContracts?[
+              parking.regionId == null || 
+              parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
+            ]
         ) || 
         // Update contract information
         (
@@ -61,4 +70,15 @@ model UserProcedure extends BaseModal {
     )
   )
   @@map("user_procedure")
+}
+
+model Contractor extends BaseModal {
+  name String
+  email String @unique
+
+  parkingContracts ParkingContract[]
+  userProcedures UserProcedure[]
+
+  @@allow('all', true)
+  @@map("contractor")
 }

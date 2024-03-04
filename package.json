@@ -10,13 +10,13 @@
     "dev": "nodemon index.js"
   },
   "devDependencies": {
-    "prisma": "^5.4.2",
+    "prisma": "5.4.2",
     "ts-node": "^10.9.1",
     "nodemon": "^2.0.15",
     "zenstack": "^1.6.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.4.2",
+    "@prisma/client": "5.4.2",
     "@prisma/generator-helper": "^5.9.1",
     "@zenstackhq/runtime": "^1.6.0",
     "cors": "^2.8.5",

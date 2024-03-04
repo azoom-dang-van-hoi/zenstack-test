@@ -1,5 +1,3 @@
-INSERT INTO `_prisma_migrations` VALUES ('60156518-6efc-4ea2-bf3e-8ebc14d3dc67','ca5f98a64d95b995812801feb7c35b2ff81c4b39eda94067604d39e0c5c69c5a','2024-02-09 08:09:47.732','20240209080947_init_database',NULL,NULL,'2024-02-09 08:09:47.558',1),('a3a84180-719c-4725-8b81-91983830d72b','ad1079f5ab0dbd4eca7d012cf1d0016f1093dab2ab756f84226285d9872603f3','2024-02-16 14:50:59.236','20240216145059_add_column_created_datetime',NULL,NULL,'2024-02-16 14:50:59.189',1),('d31fb0ae-f5be-4d51-bf7f-3cee743bf0ea','8476c8cf475e3f748f9094a070cb48c874956813cab39c6ef83f2f33ebb8ddd6','2024-02-16 06:19:04.306','20240216061904_add_table_region',NULL,NULL,'2024-02-16 06:19:04.083',1);
-
 INSERT INTO `organization` VALUES (1,'ORG-1','HN','399949494','9393383883','org-1@azoom.jp','2024-02-16 14:50:59.180','2024-02-16 14:50:59.180'),(2,'ORG-2','GN','30303030','30303003',NULL,'2024-02-16 14:50:59.180','2024-02-16 14:50:59.180');
 
 INSERT INTO `organization_staff` VALUES (1,1,'org-11@gmail.com','Org staff 1',NULL,1,'2024-02-09 08:12:53.617','2024-02-09 08:12:53.617'),(2,1,'org-12@gmail.com','Org-12',NULL,1,'2024-02-09 08:13:27.919','2024-02-09 08:13:27.919'),(3,2,'org-21@gmail.com','Org 21',NULL,1,'2024-02-18 16:34:53.407','2024-02-18 16:34:53.407');
@@ -19,3 +17,16 @@ INSERT INTO `zenstack-test`.`user_procedure` (`organization_id`, `status`, `type
 INSERT INTO `zenstack-test`.`user_procedure` (`organization_id`, `status`, `type`) VALUES ('2', '1', '1');
 INSERT INTO `zenstack-test`.`user_procedure` (`parking_contract_id`, `status`, `type`) VALUES ('6', '1', '2');
 INSERT INTO `zenstack-test`.`user_procedure` (`parking_contract_id`, `status`, `type`) VALUES ('2', '1', '3');
+
+INSERT INTO `zenstack-test`.`contractor` (`name`, `email`) 
+VALUES ('Contractor 1', 'contractor-1@gmail.com'), ('Contractor 2', 'contractor-2@gmail.com');
+
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '1' WHERE (`id` = '1');
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '1' WHERE (`id` = '2');
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '2' WHERE (`id` = '3');
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '2' WHERE (`id` = '4');
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '1' WHERE (`id` = '5');
+UPDATE `zenstack-test`.`parking_contract` SET `contractor_id` = '2' WHERE (`id` = '6');
+
+UPDATE `zenstack-test`.`user_procedure` SET `contractor_id` = '1' WHERE (`id` = '3');
+UPDATE `zenstack-test`.`user_procedure` SET `contractor_id` = '2' WHERE (`id` = '4');

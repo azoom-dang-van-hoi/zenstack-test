@@ -87,6 +87,29 @@ app.get("/v1/procedures", async (req, res) => {
             {
               parkingContractId: null,
               organizationId: user.organizationId,
+              contractorId: {
+                not: null,
+              },
+              contractor: {
+                parkingContracts: {
+                  some: {
+                    parking: {
+                      OR: [
+                        { regionId: null },
+                        {
+                          region: {
+                            organizationStaffRegions: {
+                              some: {
+                                organizationStaffId: user.id,
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
             },
           ],
         }
