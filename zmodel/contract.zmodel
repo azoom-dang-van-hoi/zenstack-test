@@ -45,7 +45,7 @@ model UserProcedure extends BaseModal {
     (
       auth().role == 'owner' &&
       (
-        // Update contractor information affects multiple contracts of various owners.
+  // Update contractor information affects multiple contracts of various owners.
         (
             parkingContractId == null &&
             auth().organizationId == organizationId &&
@@ -55,12 +55,12 @@ model UserProcedure extends BaseModal {
               parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
             ]
         ) || 
-        // Update contract information
+  // Update contract information
         (
             organizationId == null &&
             parkingContract.parking.organizationId == auth().organizationId &&
-            // TODO: Add a custom function or use inheritance to check region conditions
-            // Logic check region
+  // TODO: Add a custom function or use inheritance to check region conditions
+  // Logic check region
             (
                 parkingContract.parking.regionId == null ||
                 parkingContract.parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
@@ -78,7 +78,51 @@ model Contractor extends BaseModal {
 
   parkingContracts ParkingContract[]
   userProcedures UserProcedure[]
+  notifications Notification[]
 
-  @@allow('all', true)
+  @@allow('all', 
+    auth().role == 'admin' ||
+    (
+      auth().role == 'owner' &&
+      parkingContracts?[parking.organizationId == auth().organizationId && 
+        (
+          parking.regionId == null ||
+          parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
+        )
+      ]
+    )
+  )
   @@map("contractor")
+}
+
+model Notification extends BaseModal {
+  createdOrganizationId Int? @map("created_organization_id")
+  contentType Int @map("content_type")
+  historyId String? @map("history_id")
+  email String @map("email") @db.VarChar(255)
+  contractorId Int? @map("contractor_id")
+  contractor Contractor? @relation(fields: [contractorId], references: [id])
+  content String @map("content") @db.VarChar(255)
+  detailTitle String? @map("detail_title") @db.VarChar(60)
+  detailUrl String? @map("detail_url") @db.VarChar(255)
+  target Int @map("target")
+  readDatetime DateTime? @map("read_datetime")
+
+  @@allow('all',
+    auth().role == 'admin' ||
+    (
+      auth().role == 'owner' &&
+      (
+        createdOrganizationId == auth().organizationId &&
+        contractorId != null &&
+        contractor.parkingContracts?[
+          parking.organizationId == auth().id &&
+          parking.regionId == null || 
+          parking.region.organizationStaffRegions?[organizationStaffId == auth().id]
+        ]
+      )
+    )
+  )
+
+  @@map("notification")
 }

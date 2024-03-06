@@ -1,5 +1,6 @@
 import { enhance } from "@zenstackhq/runtime"
 import { prisma } from "./db.js"
+import { getHistories, getHistoryById } from './services/azoom-notif.js'
 
 import express from "express"
 import cors from "cors"
@@ -141,6 +142,39 @@ app.get("/v2/procedures", async (req, res) => {
   })
   const userProcedures = await enhancedClient.userProcedure.findMany()
   res.send(userProcedures)
+})
+
+app.get("/v2/custom-notifications/:id", async (req, res) => {
+  const user = req.user
+  const notificationId = req.params.id
+
+  const enhancedClient = enhance(prisma, {
+    user,
+  })
+
+  const notification = await enhancedClient.notification.findUnique({
+    where: {
+      id: +notificationId
+    }
+  })
+
+  if (!notification) return res.sendStatus(404)
+
+  const history = getHistoryById(notification.historyId)
+
+  const staffNameExcute = await enhancedClient.organizationStaff.findFirst({
+    where: {
+      email: history.executedStaff
+    }
+  })
+
+  const notificationHistory = {
+    ...history,
+    executedStaff: staffNameExcute?.name,
+    executedStaffEmail: staffNameExcute?.email
+  }
+
+  res.send(notificationHistory)
 })
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
